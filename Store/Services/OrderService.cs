@@ -91,9 +91,8 @@ namespace Store.Core.Services
             }
 
             order.OrderProduct.Stock -= order.Amount;
-            var updateProduct = UpdateProduct(order.OrderProduct);
-            var addOrder = _orderCacheRepository.AddNewOrder(await _orderRepository.AddNewOrder(order));
-            await Task.WhenAll(updateProduct, addOrder);
+            await UpdateProduct(order.OrderProduct);
+            await _orderCacheRepository.AddNewOrder(await _orderRepository.AddNewOrder(order));
             _logger.Information("Order was successfully added");
             return string.Empty;
         }
@@ -191,10 +190,10 @@ namespace Store.Core.Services
                     order.OrderProduct.Stock += oldOrder.Amount;
                 }
                 order.OrderProduct.Stock -= order.Amount;
-                var updateProduct = UpdateProduct(order.OrderProduct);
+                await UpdateProduct(order.OrderProduct);
                 var updateDb = _orderRepository.UpdateOrder(order);
                 var updateCache = _orderCacheRepository.UpdateOrder(order);
-                await Task.WhenAll(updateProduct, updateDb, updateCache);
+                await Task.WhenAll(updateDb, updateCache);
             }
             else
             {

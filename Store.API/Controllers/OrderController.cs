@@ -191,8 +191,8 @@ namespace Store.API.Controllers
             }
         }
 
-        [HttpDelete("DeleteProduct")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        [HttpDelete("DeleteOrder")]
+        public async Task<IActionResult> DeleteOrder(int id)
         {
             try
             {
